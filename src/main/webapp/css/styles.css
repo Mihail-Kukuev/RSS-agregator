@@ -1,0 +1,227 @@
+body {
+    height: 100%;
+    max-height: 100%;
+    overflow: auto;
+    background-color: #f7f6f6;
+}
+i {
+    cursor: pointer;
+}
+.navbar {
+    padding: 8px 150px;
+    border-radius: 0px;
+    background-color: #1565C0;
+    color: white;
+}
+    .navbar-brand {
+        display: inline-block;
+        height: auto;
+        margin-top: 5px;
+        padding: 0px 0px;
+        vertical-align: middle;
+    }
+    .fa-rss {
+        margin-right: 10px;
+    }
+    .language-button,
+    .language-button:hover {
+        float: right;
+        margin-right: 10px;
+        padding: 5px 10px;
+        background-color: inherit;
+        border: 1px solid white;
+    }
+    .pressed, .pressed:hover {
+        background-color: white;
+        color: #1565C0;
+    }
+/*.auth-button,
+.auth-button:hover {
+    float: right;
+    margin-right: 20px;
+    padding: 5px 10px;
+    background-color: #0D47A1;
+    border: 1px solid white ;
+}*/
+
+.container-main {
+    margin-top: 50px;
+    padding: 30px 10px;
+    width: 73%;
+    text-align: center;
+    background-color: #f7f6f6;
+}
+
+.item {
+    position: relative;
+    display: inline-block;
+    margin: 10px;
+    padding: 10px;
+    width: 600px;
+    /*max-height: 300px;*/
+    overflow-y: hidden;
+    background-color: white;
+    font-size: 12px;
+    text-align: left;
+    border: 1px solid #ebebeb;
+    border-radius: 3px;
+    box-shadow: 1px 1px 0 0 darkgray;
+}
+    .item h3 {
+        color: #0D47A1;
+        font-size: 18px;
+    }
+    .item span {
+        color: #1E88E5;
+    }
+    .item img {
+        display: inline-block;
+        margin-right: 5px;
+        max-width: 200px;
+        height: auto;
+        border: 1px solid #ebebeb;
+        border-radius: 3px;
+        vertical-align: middle;
+    }
+    .item .article-text {
+        display: inline-block;
+        max-height: 200px;
+        overflow-y: hidden;
+        overflow-x: hidden;
+        /*width: 320px;*/
+        margin-right: 10px;
+        vertical-align: middle;
+    }
+    .new-flag {
+        display:inline-block;
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        vertical-align: top;
+    }
+    .fa-square-o, .fa-check-square {
+        display: inline-block;
+        position: absolute;
+        bottom: 10px;
+        right: 15px;
+        color: #1E88E5;
+    }
+    .fa-check-square {
+        color: gray;
+    }
+
+.item-checked {
+    opacity: 0.6;
+}
+.item-checked div,
+.item-checked div h3,
+.item-checked div span{
+    color: gray;
+}
+.item-checked .new-flag {
+    display: none;
+}
+
+.read-more {
+    display: inline-block;
+    margin: 10px;
+    width: 600px;
+}
+.read-more a{
+    float: right;
+    font-size: 16px;
+    color: #1E88E5;
+    text-decoration: underline;
+}
+
+/*----------aside----------------------------*/
+.container-aside{
+    position: fixed;
+    top: 30px;
+    right: 0px;
+    width: 27%;
+    height: 100%;
+    overflow: auto;
+    padding: 50px 30px;
+    background-color: #ebebeb;
+}
+.form-inline {
+    margin-bottom: 40px;
+    display: inline-block;
+}
+.form-inline input {
+    margin-right: 5px;
+}
+.fa-plus-square, .fa-cog {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0px 5px;
+    color: #1565C0;
+}
+
+span.organize-feeds {
+    color: gray;
+    display:inline-block;
+    vertical-align: middle;
+    font-size: 18px;
+    cursor: pointer;
+    text-decoration: underline;
+}
+.list-group {
+    margin-top: 10px;
+    display: inline-block;
+    width: 250px;
+    border-radius: 20px;
+}
+    .list-group-item {
+        border: none;
+        border-radius: 20px !important;
+        padding: 5px 10px;
+        background-color: #ebebeb;
+        color: gray;
+        cursor: pointer;
+    }
+    .list-group-item:hover {
+        color: #1565C0;
+    }
+    .list-group-item i{
+        display: none;
+    }
+    .badge {
+        background-color: #ebebeb;
+        color: #1565C0;
+    }
+    .fa-bars {
+        margin-right: 5px;
+        color: #1565C0;
+    }
+    .fa-times-circle {
+        display: inline-block;
+        float: right;
+        color: #1565C0;
+    }
+
+.list-edit .list-group-item i{
+    display: inline-block;
+}
+.list-edit .list-group-item .badge{
+    display: none;
+}
+.list-edit .list-group-item,
+.list-edit .list-group-item:hover{
+    background-color: inherit;
+    color: inherit;
+}
+
+.btn-read {
+    margin-top: 20px;
+    padding: 5px 10px;
+    border-radius: 15px;
+    color: #1E88E5;
+    border: 1px solid #1E88E5;
+    background-color: #ebebeb;
+}
+.btn-read:hover {
+    background-color: #1E88E5;
+    border: 1px solid #1E88E5;
+}
