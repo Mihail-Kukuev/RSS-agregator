@@ -48,7 +48,7 @@ public class FeedController {
             feedTitle = "invalid";
         }
         if (!feedTitle.equals("invalid"))
-            feedTitle = syndFeed.getTitle();
+            feedTitle = (syndFeed.getTitle().trim().equals("")) ? syndFeed.getLink() : syndFeed.getTitle();
 
         return feedTitle;
     }
@@ -59,8 +59,9 @@ public class FeedController {
             imgUrl = "empty";
         else
             imgUrl = syndFeed.getImage().getUrl();
+        String feedTitle = (syndFeed.getTitle().trim().equals("")) ? syndFeed.getLink() : syndFeed.getTitle();
 
-        return new Feed(syndFeed.getLink(), syndFeed.getTitle(), imgUrl);
+        return new Feed(syndFeed.getLink(), feedTitle, imgUrl);
     }
 
     private SyndFeed getSyndFeed(String feedUrl) {

@@ -43,8 +43,9 @@ window.onunload = function() {
 	localStorage.setItem("feeds",JSON.stringify(feeds));
 };
 
-function checkAsRead (elem){
+function checkAsRead (elem, off){
 	item = elem.parentNode;
+	if (item.className.indexOf("item")==-1) item = item.parentNode;
 	var activeFeedName = getActiveFeedName();
 	if (item.className=="item"){
 		item.className = "item item-checked";
@@ -55,7 +56,7 @@ function checkAsRead (elem){
 			feeds[index].deleteItemDate(item.id);
 		}
 	}
-	else {
+	else if (!off){
 		item.className = "item";
 		item.lastElementChild.className = "fa fa-square-o fa-2x";
 		feeds[indexOfFeed(getActiveFeedName())].addItemDate(item.id);
@@ -68,11 +69,11 @@ function createItem(url, title, date, description, imgUrl) {
 	item.className = "item";
 	item.id = date;
 
-	var beginHTML = (imgUrl=="empty") ? "" : '<a href="'+url+'"><img src="' + imgUrl + '"></a>';
+	var beginHTML = (imgUrl=="empty") ? "" : '<a href="'+url+'" onclick="checkAsRead(this, true)"><img src="' + imgUrl + '"></a>';
 	var textAttribute = (imgUrl=="empty") ? '' : 'style="width: 320px;"';
-	item.innerHTML = beginHTML + '<div class="article-text"' + textAttribute + '><a href="'+url+'"><h3>' + title
-		+ '</h3></a><span>' + new Date(date).toLocaleString() + '</span><br>' + description + '</div><span class="new-flag">NEW</span>'
-		+ '<i class="fa fa-square-o fa-2x" onclick="checkAsRead(this)"></i>';
+	item.innerHTML = beginHTML + '<div class="article-text"' + textAttribute + '><a href="'+url+'" onclick="checkAsRead(this, true)"><h3>'
+		+ title + '</h3></a><span>' + new Date(date).toLocaleString() + '</span><br>' + description
+		+ '</div><span class="new-flag">NEW</span>' + '<i class="fa fa-square-o fa-2x" onclick="checkAsRead(this)"></i>';
 	return item;
 
 	//todo: create read or unread?
@@ -122,6 +123,7 @@ function getActiveFeedName() {
 	if (activeElements.length!=0) return activeElements[0].firstChild.nextSibling.textContent;
 	else return null;
 }
+
 function updateCountOfUnread(feedName) {
 	var feedNodes = document.getElementById("list-feeds").children;
 	/*var feedNodes = listNodes.filter(function(node){

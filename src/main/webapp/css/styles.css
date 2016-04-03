@@ -77,7 +77,7 @@ i {
     .item img {
         display: inline-block;
         margin-right: 5px;
-        max-width: 200px;
+        width: 200px;
         height: auto;
         border: 1px solid #ebebeb;
         border-radius: 3px;
