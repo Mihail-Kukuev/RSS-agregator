@@ -37,7 +37,7 @@ public class FeedController {
     }
 
     @RequestMapping(value = "rss/validate_feed", method= RequestMethod.GET)
-    public String validateFeedUrl(@RequestParam String validateUrl) {
+    public Feed validateFeedUrl(@RequestParam String validateUrl) {
         SyndFeed syndFeed = null;
         String feedTitle = "";
         try {
@@ -50,15 +50,11 @@ public class FeedController {
         if (!feedTitle.equals("invalid"))
             feedTitle = (syndFeed.getTitle().trim().equals("")) ? syndFeed.getLink() : syndFeed.getTitle();
 
-        return feedTitle;
+        return new Feed(syndFeed.getLink(), feedTitle, "");
     }
 
     private Feed getFeedInfo(SyndFeed syndFeed) {
-        String imgUrl;
-        if (syndFeed.getImage()==null)
-            imgUrl = "empty";
-        else
-            imgUrl = syndFeed.getImage().getUrl();
+        String imgUrl = "empty";
         String feedTitle = (syndFeed.getTitle().trim().equals("")) ? syndFeed.getLink() : syndFeed.getTitle();
 
         return new Feed(syndFeed.getLink(), feedTitle, imgUrl);
@@ -92,7 +88,7 @@ public class FeedController {
                 String url = matcher.group().replace("src=\"", "");
                 imgUrl = url.substring(0, url.length()-1);
                 /*if (!imgUrl.contains("http"))
-                    imgUrl = feed.getUrl() + imgUrl;*/
+                    imgUrl = feed.getLink() + imgUrl;*/
             }
         }
 

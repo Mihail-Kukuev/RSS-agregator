@@ -1,14 +1,6 @@
 var feeds = [];
 mainUrl = "rss/";
 
-/*feeds.push(new Feed("https://habrahabr.ru/rss/hub/java/", "Хабрахабр / JAVA / Интересные публикации"));
-feeds.push(new Feed("https://dev.by/rss", "dev.by: Все о работе в IT"));
-feeds.push(new Feed("http://news.tut.by/rss/afisha.rss", "TUT.BY: Новости ТУТ - Афиша"));
-feeds.push(new Feed("http://lifehacker.ru/feed/", "Лайфхакер"));
-localStorage.clear();
-localStorage.setItem("feeds", JSON.stringify(feeds));
-feeds.length = 0;*/
-
 window.onload = function() {
 	document.forms.addFeedForm.addEventListener('keypress', function(e) {
 		if (e.keyCode == 13) addFeed();
@@ -19,20 +11,20 @@ window.onload = function() {
 	if (feeds==null) feeds = [];
 	else for (var i=0; i<feeds.length; i++){
 		feeds[i].deleteItemDate = function (date) {
-			this.unreadItems.splice(this.unreadItems.indexOf(date), 1);
+			if (this.unreadItems.indexOf(date) != -1)
+				this.unreadItems.splice(this.unreadItems.indexOf(date), 1);
 		};
 
 		feeds[i].addItemDate = function (date) {
 			if (this.unreadItems.indexOf(date)==-1)
 				this.unreadItems.push(date);
-			//todo: вставить в нужное место
 		};
 	}
 
 	//create list of feeds
 	var feedListDiv = document.getElementById("list-feeds");
 	feeds.forEach(function(feed, i, arr) {
-		feedListDiv.insertAdjacentHTML('beforeEnd', createFeedItemHTML(feed.feedTitle, feed.unreadItems.length));
+		feedListDiv.insertAdjacentHTML('beforeEnd', createFeedItemHTML(feed.feedTitle, feed.unreadItems.length, feed.link));
 	});
 	if (feedListDiv.childElementCount!=0){
 		clickOnFeed(feedListDiv.firstElementChild);
@@ -64,50 +56,79 @@ function checkAsRead (elem, off){
 	updateCountOfUnread(activeFeedName);
 }
 
-function createItem(url, title, date, description, imgUrl) {
+function createItem(url, title, date, description, imgUrl, isRead) {
+	var itemClassName = "item";
+	var iconClassName = "fa fa-square-o fa-2x";
+	if (isRead) {
+		itemClassName = "item item-checked";
+		iconClassName = "fa fa-check-square fa-2x";
+	}
+
 	var item = document.createElement("article");
-	item.className = "item";
+	item.className = itemClassName;
 	item.id = date;
 
 	var beginHTML = (imgUrl=="empty") ? "" : '<a href="'+url+'" onclick="checkAsRead(this, true)"><img src="' + imgUrl + '"></a>';
 	var textAttribute = (imgUrl=="empty") ? '' : 'style="width: 320px;"';
 	item.innerHTML = beginHTML + '<div class="article-text"' + textAttribute + '><a href="'+url+'" onclick="checkAsRead(this, true)"><h3>'
 		+ title + '</h3></a><span>' + new Date(date).toLocaleString() + '</span><br>' + description
-		+ '</div><span class="new-flag">NEW</span>' + '<i class="fa fa-square-o fa-2x" onclick="checkAsRead(this)"></i>';
+		+ '</div><span class="new-flag">NEW</span>' + '<i class="' + iconClassName + '" onclick="checkAsRead(this)"></i>';
 	return item;
-
-	//todo: create read or unread?
 }
 
 function loadItems(response) {
-	var itemListDiv = document.getElementById("list-items");
-	itemListDiv.innerHTML="";
-	itemListDiv.insertAdjacentHTML('afterBegin', '<span class="read-more"><a href="">Read more</a></span>');
-	var lastChild = itemListDiv.lastElementChild;
 	var feed = JSON.parse(response);
-
 	var feedIndex = indexOfFeed(feed.title);
 
-	//todo: don't delete unread
-	feeds[feedIndex].unreadItems.length = 0;
-	feed.items.forEach(function(item, i, arr){
-		itemListDiv.insertBefore(createItem(item.url, item.title, item.date, item.description, item.imgUrl), lastChild);
+	var itemListDiv = document.getElementById("list-items");
+	itemListDiv.innerHTML = "";
+	itemListDiv.insertAdjacentHTML('afterBegin', '<span class="rss-link"><a href="'
+		+ feeds[feedIndex].feedUrl + '"><i class="fa fa-rss "></i>' + feed.title + '</a></span>');
+	var lastChild = itemListDiv.lastElementChild;
 
-		//all feeds are unread
-		feeds[feedIndex].unreadItems.push(item.date);
-		//todo: add to array only new unread items
+	var maxDate = 0;
+
+	feed.items.forEach(function(item, i, arr){
+		var isRead = false;
+		if (item.date > feeds[feedIndex].lastDate){  //new item
+			isRead = false;
+			feeds[feedIndex].unreadItems.push(""+item.date);
+		}
+		else if (feeds[feedIndex].unreadItems.indexOf(""+item.date)==-1) {  //read item
+			isRead = true;
+		}
+
+		// itemListDiv.insertBefore(createItem(item.url, item.title, item.date, item.description, item.imgUrl, isRead), lastChild);
+		itemListDiv.insertAdjacentElement("beforeEnd",
+			createItem(item.url, item.title, item.date, item.description, item.imgUrl, isRead));
+		if (maxDate < item.date)
+			maxDate = item.date;
 	});
+	feeds[feedIndex].lastDate = maxDate;
+
 	updateCountOfUnread(feed.title);
 }
 
 //-------------------------FEEDS---------------------------------/
-function Feed (url, title, arr) {
+function Feed (url, title, link, arr) {
 	this.feedUrl = url;
 	this.feedTitle = title;
+	this.lastDate = 1;
+	this.link = link;
 	if (arr==null)
 		this.unreadItems = [];
 	else
 		this.unreadItems = arr;
+
+	this.deleteItemDate = function (date) {
+		if (this.unreadItems.indexOf(date) != -1)
+			this.unreadItems.splice(this.unreadItems.indexOf(date), 1);
+	};
+
+	this.addItemDate = function (date) {
+		if (this.unreadItems.indexOf(date)==-1)
+			this.unreadItems.push(date);
+	};
 }
 function indexOfFeed(feedName) {
 	for(var i= 0; i<feeds.length; i++){
@@ -126,11 +147,6 @@ function getActiveFeedName() {
 
 function updateCountOfUnread(feedName) {
 	var feedNodes = document.getElementById("list-feeds").children;
-	/*var feedNodes = listNodes.filter(function(node){
-		if (node.nodeType==1 && node.className.indexOf("list-group-item")!=-1)
-			return true;
-		else return false;
-	});*/
 
 	for (var i=0; i<feedNodes.length; i++) {
 		if (feedNodes[i].firstChild.nextSibling.textContent==feedName) {
@@ -154,14 +170,16 @@ function addFeed() {
 		return;
 
 	ajax('GET', mainUrl+'validate_feed/?validateUrl='+form.text.value.trim(), null, function(response) {
-		if (response=='invalid')
+		var feed = JSON.parse(response);
+		
+		if (feed.title=='invalid')
 			alert('Wrong input! It isn\'t a rss-line');
 		else {
-			var newFeed = new Feed(inputValue, response);
+			var newFeed = new Feed(inputValue, feed.title, feed.link);
 			feeds.push(newFeed);
 
 			document.getElementById("list-feeds").insertAdjacentHTML('beforeEnd',
-				createFeedItemHTML(newFeed.feedTitle, newFeed.unreadItems.length));
+				createFeedItemHTML(newFeed.feedTitle, newFeed.unreadItems.length, newFeed.link));
 			form.text.value = '';
 
 			//solve: add all items as unread
@@ -170,16 +188,18 @@ function addFeed() {
 	});
 }
 
-function createFeedItemHTML(feedName, itemsCount) {
+function createFeedItemHTML(feedName, itemsCount, feedUrl) {
 	if (itemsCount==0) itemsCount = '';
-	return '<li class="list-group-item" onclick="clickOnFeed(this)"><i class="fa fa-bars fa-large"></i>' + feedName +
+	return '<div class="list-group-item" onclick="clickOnFeed(this)">' +
+		'<img src="http://www.google.com/s2/favicons?domain_url=' + feedUrl + '">' +
+		feedName +
 		'<i class="fa fa-times-circle fa-large" onclick="deleteFeed(this)"></i><span class="badge">'+ itemsCount + '</span></li>';
 }
 
 function clickOnFeed (elem){
 	feedItemName = elem.className;
-	if (feedItemName=="list-group-item active")
-		return;
+	/*if (feedItemName=="list-group-item active")
+		return;*/
 
 	var feedName = elem.firstChild.nextSibling.textContent;
 	if (indexOfFeed(feedName)==-1)
@@ -192,7 +212,7 @@ function clickOnFeed (elem){
 	url = mainUrl + 'get_feed/?feedUrl=' + feeds[indexOfFeed(feedName)].feedUrl;
 	ajax('GET', url, null, loadItems);
 
-	//todo: update unread feeds
+	//todo: update ALL unread feeds
 }
 
 function markFeedAsRead(){

@@ -3,7 +3,7 @@ package by.bsu.fpmi;
 import java.util.List;
 
 public class Feed {
-    private String url;
+    private String link;
     private String title;
     private String imgUrl;
     private List<Item> items;
@@ -12,18 +12,18 @@ public class Feed {
     public Feed() {
     }
 
-    public Feed(String url, String title, String imgUrl) {
-        this.url = url;
+    public Feed(String link, String title, String imgUrl) {
+        this.link = link;
         this.title = title;
         this.imgUrl = imgUrl;
     }
 
-    public String getUrl() {
-        return url;
+    public String getLink() {
+        return link;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setLink(String link) {
+        this.link = link;
     }
 
     public String getTitle() {

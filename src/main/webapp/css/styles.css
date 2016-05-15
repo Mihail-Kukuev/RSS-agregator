@@ -20,9 +20,6 @@ i {
         padding: 0px 0px;
         vertical-align: middle;
     }
-    .fa-rss {
-        margin-right: 10px;
-    }
     .language-button,
     .language-button:hover {
         float: right;
@@ -47,9 +44,19 @@ i {
 .container-main {
     margin-top: 50px;
     padding: 30px 10px;
-    width: 73%;
+    width: 70%;
     text-align: center;
     background-color: #f7f6f6;
+}
+
+.rss-link a{
+    display: block;
+    font-size: 18px;
+    color: #1E88E5;
+
+}
+.fa-rss {
+    margin-right: 10px;
 }
 
 .item {
@@ -127,19 +134,13 @@ i {
     margin: 10px;
     width: 600px;
 }
-.read-more a{
-    float: right;
-    font-size: 16px;
-    color: #1E88E5;
-    text-decoration: underline;
-}
 
 /*----------aside----------------------------*/
 .container-aside{
     position: fixed;
     top: 30px;
     right: 0px;
-    width: 27%;
+    width: 30%;
     height: 100%;
     overflow: auto;
     padding: 50px 30px;
@@ -170,7 +171,7 @@ span.organize-feeds {
 .list-group {
     margin-top: 10px;
     display: inline-block;
-    width: 250px;
+    width: 300px;
     border-radius: 20px;
 }
     .list-group-item {
@@ -191,14 +192,13 @@ span.organize-feeds {
         background-color: #ebebeb;
         color: #1565C0;
     }
-    .fa-bars {
-        margin-right: 5px;
-        color: #1565C0;
-    }
     .fa-times-circle {
         display: inline-block;
         float: right;
         color: #1565C0;
+    }
+    .list-group-item img{
+        margin-right: 5px;
     }
 
 .list-edit .list-group-item i{
