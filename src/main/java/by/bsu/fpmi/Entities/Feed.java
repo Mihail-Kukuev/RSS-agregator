@@ -1,4 +1,4 @@
-package by.bsu.fpmi;
+package by.bsu.fpmi.Entities;
 
 import java.util.List;
 

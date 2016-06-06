@@ -129,12 +129,6 @@ i {
     display: none;
 }
 
-.read-more {
-    display: inline-block;
-    margin: 10px;
-    width: 600px;
-}
-
 /*----------aside----------------------------*/
 .container-aside{
     position: fixed;
@@ -150,8 +144,9 @@ i {
     margin-bottom: 40px;
     display: inline-block;
 }
-.form-inline input {
+.form-inline input.form-control {
     margin-right: 5px;
+    width: 80%;
 }
 .fa-plus-square, .fa-cog {
     display: inline-block;
@@ -171,7 +166,7 @@ span.organize-feeds {
 .list-group {
     margin-top: 10px;
     display: inline-block;
-    width: 300px;
+    width: 95%;
     border-radius: 20px;
 }
     .list-group-item {
@@ -189,6 +184,7 @@ span.organize-feeds {
         display: none;
     }
     .badge {
+        margin-left: 10px;
         background-color: #ebebeb;
         color: #1565C0;
     }

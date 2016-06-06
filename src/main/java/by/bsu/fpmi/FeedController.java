@@ -1,11 +1,14 @@
 package by.bsu.fpmi;
 
+import by.bsu.fpmi.Entities.Feed;
+import by.bsu.fpmi.Entities.Item;
 import com.sun.syndication.feed.synd.SyndEnclosureImpl;
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -87,8 +90,6 @@ public class FeedController {
             if (matcher.find()) {
                 String url = matcher.group().replace("src=\"", "");
                 imgUrl = url.substring(0, url.length()-1);
-                /*if (!imgUrl.contains("http"))
-                    imgUrl = feed.getLink() + imgUrl;*/
             }
         }
 

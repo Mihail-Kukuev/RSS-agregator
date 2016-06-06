@@ -1,5 +1,36 @@
 var feeds = [];
 mainUrl = "rss/";
+var engLocale = {
+	language : "eng",
+	appName : "RSS-aggreagator",
+	inputPlaceholder : "New feed url",
+	organizeFeeds : "Organize your feeds",
+	markFeed : "Mark feed as read",
+	msgExistsFeed : "Such feed already exists.",
+	msgWronginput : "Wrong input! It isn\'t an RSS-feed"
+};
+var ruLocale = {
+	language : "ru",
+	appName : "RSS-агрегатор",
+	inputPlaceholder : "Адрес новой ленты",
+	organizeFeeds : "Редактировать список лент",
+	markFeed : "Отметить ленту как прочитанную",
+	msgExistsFeed : "Такая лента уже есть в списке",
+	msgWronginput : "Введенный адрес не является RSS-ресурсом"
+};
+var locale = {};
+locale.language = engLocale;
+
+function changeLocale(language) {
+	if (locale.language==language) return;
+	locale = (language=='ru') ? ruLocale : engLocale;
+	for (var key in locale) {
+		if (key=="inputPlaceholder")
+			document.getElementById(key).setAttribute("placeholder", locale[key])
+		else if (key=="appName" || key=="inputPlaceholder" || key=="organizeFeeds" || key=="markFeed")
+			document.getElementById(key).textContent = locale[key];
+	}
+}
 
 window.onload = function() {
 	document.forms.addFeedForm.addEventListener('keypress', function(e) {
@@ -162,7 +193,7 @@ function addFeed() {
 
 	feeds.forEach(function(feed, i, arr){
 		if (feed.feedUrl==inputValue){
-			alert("Such feed already exists!");
+			alert(locale.msgExistsFeed);
 			form.text.value = '';
 		}
 	});
@@ -173,7 +204,7 @@ function addFeed() {
 		var feed = JSON.parse(response);
 		
 		if (feed.title=='invalid')
-			alert('Wrong input! It isn\'t a rss-line');
+			alert(locale.msgWronginput);
 		else {
 			var newFeed = new Feed(inputValue, feed.title, feed.link);
 			feeds.push(newFeed);
